@@ -65,5 +65,9 @@ class SymfonyProfilerMcpBundle extends AbstractBundle
                 new Reference(FormatterRegistry::class),
             ])
             ->setAutoconfigured(true);
+
+        $builder->register(McpCapabilityLoader::class)
+            ->setArguments([new Reference('logger')])
+            ->setAutoconfigured(true);
     }
 }
