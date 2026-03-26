@@ -30,7 +30,7 @@ class ProfilerDataProvider
 
         foreach ($this->storageResolver->resolve() as $entry) {
             $profiler = new Profiler($entry['storage']);
-            $tokens = $profiler->find($ip, $url, $limit, $method, null, null, $statusCode);
+            $tokens = $profiler->find($ip, $url, $limit, $method, null, null, null !== $statusCode ? (string) $statusCode : null);
 
             foreach ($tokens as $token) {
                 $profile = $profiler->loadProfile($token['token']);
