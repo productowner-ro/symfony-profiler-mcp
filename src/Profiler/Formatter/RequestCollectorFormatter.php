@@ -6,6 +6,7 @@ namespace ProductOwner\SymfonyProfilerMcp\Profiler\Formatter;
 
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class RequestCollectorFormatter implements CollectorFormatterInterface
 {
@@ -36,10 +37,10 @@ class RequestCollectorFormatter implements CollectorFormatterInterface
             'content_type' => $collector->getContentType(),
             'status_code' => $collector->getStatusCode(),
             'status_text' => $collector->getStatusText(),
-            'request_headers' => $this->redactHeaders($collector->getRequestHeaders()->all()),
-            'response_headers' => $this->redactHeaders($collector->getResponseHeaders()->all()),
-            'request_query' => $collector->getRequestQuery()->all(),
-            'request_attributes' => $collector->getRequestAttributes()->all(),
+            'request_headers' => $this->redactHeaders($this->extractValues($collector->getRequestHeaders()->all())),
+            'response_headers' => $this->redactHeaders($this->extractValues($collector->getResponseHeaders()->all())),
+            'request_query' => $this->extractValues($collector->getRequestQuery()->all()),
+            'request_attributes' => $this->extractValues($collector->getRequestAttributes()->all()),
         ];
     }
 
@@ -74,5 +75,29 @@ class RequestCollectorFormatter implements CollectorFormatterInterface
         }
 
         return $headers;
+    }
+
+    /**
+     * @param array<string, mixed> $values
+     *
+     * @return array<string, mixed>
+     */
+    private function extractValues(array $values): array
+    {
+        $result = [];
+        foreach ($values as $key => $value) {
+            $result[$key] = $this->extractValue($value);
+        }
+
+        return $result;
+    }
+
+    private function extractValue(mixed $value): mixed
+    {
+        if ($value instanceof Data) {
+            return $value->getValue(true);
+        }
+
+        return $value;
     }
 }

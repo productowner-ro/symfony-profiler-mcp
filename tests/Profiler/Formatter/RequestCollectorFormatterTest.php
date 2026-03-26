@@ -76,6 +76,48 @@ class RequestCollectorFormatterTest extends TestCase
         $this->assertArrayNotHasKey('request_headers', $summary);
     }
 
+    public function testHeaderValuesAreStringsNotEmptyObjects(): void
+    {
+        $collector = $this->createCollector(['X-Custom' => 'my-value']);
+
+        $formatter = new RequestCollectorFormatter();
+        $data = $formatter->format($collector);
+
+        $customHeader = $data['request_headers']['x-custom'] ?? null;
+        $this->assertNotNull($customHeader);
+        $this->assertNotSame([], $customHeader);
+        // Must be a string or array of strings, not an empty object/Data
+        $json = json_encode($data);
+        $this->assertStringNotContainsString('{}', $json, 'Header values must not serialize as empty objects');
+    }
+
+    public function testSerializedCollectorHeadersAreExtracted(): void
+    {
+        $collector = $this->createCollector(['Accept' => 'application/json']);
+
+        // Simulate profiler serialization round-trip
+        $collector = unserialize(serialize($collector));
+
+        $formatter = new RequestCollectorFormatter();
+        $data = $formatter->format($collector);
+
+        $accept = $data['request_headers']['accept'] ?? null;
+        $this->assertNotNull($accept);
+        $json = json_encode($data);
+        $this->assertStringNotContainsString('{}', $json, 'Deserialized header values must not be empty objects');
+    }
+
+    public function testRequestAttributesAreExtracted(): void
+    {
+        $collector = $this->createCollector();
+
+        $formatter = new RequestCollectorFormatter();
+        $data = $formatter->format($collector);
+
+        $json = json_encode($data['request_attributes']);
+        $this->assertStringNotContainsString('{}', $json, 'Request attributes must not serialize as empty objects');
+    }
+
     /**
      * @param array<string, string> $headers
      */
