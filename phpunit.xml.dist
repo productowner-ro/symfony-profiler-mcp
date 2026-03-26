@@ -5,6 +5,10 @@
          colors="true"
          failOnRisky="true"
          failOnWarning="true">
+    <php>
+        <server name="KERNEL_CLASS" value="ProductOwner\SymfonyProfilerMcp\Tests\App\Kernel"/>
+        <env name="APP_ENV" value="test"/>
+    </php>
     <testsuites>
         <testsuite name="default">
             <directory>tests</directory>
