@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace ProductOwner\SymfonyProfilerMcp;
 
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\CollectorFormatterInterface;
+use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\ExceptionCollectorFormatter;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\FormatterRegistry;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\GenericCollectorFormatter;
-use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\ExceptionCollectorFormatter;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\LoggerCollectorFormatter;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\RequestCollectorFormatter;
 use ProductOwner\SymfonyProfilerMcp\Profiler\ProfilerDataProvider;

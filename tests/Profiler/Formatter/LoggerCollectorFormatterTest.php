@@ -63,7 +63,7 @@ class LoggerCollectorFormatterTest extends TestCase
 
     private function createCollectorWithLogs(): LoggerDataCollector
     {
-        $logger = new Logger();
+        $logger = new Logger(output: fopen('/dev/null', 'w'));
         $logger->info('Matched route', ['route' => 'test_ok']);
         $logger->error('Something failed', ['exception' => 'RuntimeException']);
 
