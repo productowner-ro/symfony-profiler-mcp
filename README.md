@@ -18,7 +18,38 @@ Symfony bundle that exposes profiler data to AI-powered IDEs via the [Model Cont
 composer require --dev productowner-ro/symfony-profiler-mcp
 ```
 
-Make sure `symfony/mcp-bundle` is configured in your app. See the [Symfony MCP Bundle docs](https://symfony.com/doc/current/ai/bundles/mcp-bundle.html).
+The Symfony Flex recipe configures `symfony/mcp-bundle` transports and routes automatically. If your project doesn't use Flex, create the following files manually:
+
+<details>
+<summary>Manual configuration (without Flex)</summary>
+
+**`config/packages/mcp.yaml`**
+
+```yaml
+when@dev:
+    mcp:
+        client_transports:
+            stdio: true   # For Claude Code, JetBrains, etc.
+            http: true    # For /_mcp HTTP endpoint
+```
+
+**`config/routes/mcp.yaml`** (only needed if using HTTP transport)
+
+```yaml
+when@dev:
+    mcp:
+        resource: .
+        type: mcp
+```
+
+Then clear the cache and verify:
+
+```bash
+php bin/console cache:clear
+php bin/console mcp:server   # Should start without errors (Ctrl+C to stop)
+```
+
+</details>
 
 ## How It Works
 
