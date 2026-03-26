@@ -7,6 +7,7 @@ namespace ProductOwner\SymfonyProfilerMcp;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\CollectorFormatterInterface;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\FormatterRegistry;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\GenericCollectorFormatter;
+use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\ExceptionCollectorFormatter;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Formatter\RequestCollectorFormatter;
 use ProductOwner\SymfonyProfilerMcp\Profiler\ProfilerDataProvider;
 use ProductOwner\SymfonyProfilerMcp\Profiler\Storage\ProfilerStorageResolver;
@@ -35,6 +36,9 @@ class SymfonyProfilerMcpBundle extends AbstractBundle
         $builder->register(GenericCollectorFormatter::class);
 
         $builder->register(RequestCollectorFormatter::class)
+            ->addTag('profiler_mcp.formatter');
+
+        $builder->register(ExceptionCollectorFormatter::class)
             ->addTag('profiler_mcp.formatter');
 
         $builder->registerForAutoconfiguration(CollectorFormatterInterface::class)
